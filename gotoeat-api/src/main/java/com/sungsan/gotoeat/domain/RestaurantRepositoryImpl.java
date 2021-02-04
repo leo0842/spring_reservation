@@ -27,4 +27,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     return restaurants.stream().filter(restaurant -> restaurant.getId().equals(id)).findFirst().orElse(null); //findFirst 이유: List를 오브젝트로 돌리기 위해
 
  }
+
+  @Override
+  public Restaurant save(Restaurant restaurant) {
+    restaurants.add(restaurant);
+    return restaurant;
+  }
 }

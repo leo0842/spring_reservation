@@ -1,9 +1,12 @@
 package com.sungsan.gotoeat.interfaces;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sungsan.gotoeat.application.RestaurantService;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +34,19 @@ class RestaurantControllerTests {
   @MockBean
   private RestaurantService restaurantService;
 
+  @Test
+  public void create() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.post("/restaurants")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content("{\"name\":\"Outback\",\"location\":\"Pusan\"}"))
+        .andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(header().string("location", "/restaurants/1234"))
+        .andExpect(content().string("{}"));
+
+    verify(restaurantService).addRestaurant(any());
+  }
+
 
   @Test
   public void list() throws Exception {
@@ -38,6 +55,7 @@ class RestaurantControllerTests {
     given(restaurantService.getRestaurants()).willReturn(restaurants);
 
     mvc.perform(MockMvcRequestBuilders.get("/restaurants"))
+        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().string(containsString(
             "\"id\":1"
