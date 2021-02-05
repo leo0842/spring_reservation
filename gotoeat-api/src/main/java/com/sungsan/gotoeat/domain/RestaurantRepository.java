@@ -7,5 +7,4 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
   List<Restaurant> findAll();
 
-  Restaurant save(Restaurant restaurant);
 }

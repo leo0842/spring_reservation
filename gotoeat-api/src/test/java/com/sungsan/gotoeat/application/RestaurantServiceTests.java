@@ -66,4 +66,15 @@ class RestaurantServiceTests {
 //    assertEquals(oldCount + 1, newCount); 이거는 서비스에서 할 테스트가 아님. 레포에서 하는거;
   }
 
+  @Test
+  public void updateRestaurant(){
+    Restaurant restaurant = new Restaurant(1L, "VIPS", "Seoul");
+    Restaurant updatedRestaurant = new Restaurant(1L, "Outback", "Seoul");
+
+    given(restaurantRepository.findById(1L)).willReturn(java.util.Optional.of(restaurant));
+
+    Restaurant updated = restaurantService.updateRestaurant(1L, updatedRestaurant);
+    assertEquals(updatedRestaurant.getName(), "Outback");
+  }
+
 }

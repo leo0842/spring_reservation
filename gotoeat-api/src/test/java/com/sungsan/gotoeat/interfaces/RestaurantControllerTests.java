@@ -37,8 +37,8 @@ class RestaurantControllerTests {
   @Test
   public void create() throws Exception {
     mvc.perform(MockMvcRequestBuilders.post("/restaurants")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content("{\"name\":\"Outback\",\"location\":\"Pusan\"}"))
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"Outback\",\"location\":\"Pusan\"}"))
         .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(header().string("location", "/restaurants/1234"))
@@ -86,6 +86,18 @@ class RestaurantControllerTests {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("\"id\":2,\"name\":\"VIPS\",\"location\":\"SEOUL\"")));
+
+  }
+
+  @Test
+  public void update() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.patch("/restaurants/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"Pasta\", \"location\":\"Ilsan\"}"))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(restaurantService).updateRestaurant(any(Long.class), any(Restaurant.class));
 
   }
 

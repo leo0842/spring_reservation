@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,12 @@ public class RestaurantController {
     restaurantService.addRestaurant(restaurant);
     URI uriLocation = new URI("/restaurants/"+restaurant.getId());
     return ResponseEntity.created(uriLocation).body("{}");
+  }
+
+  @PatchMapping("/restaurants/{id}")
+  public String updateRestaurant(@PathVariable("id") Long id, @RequestBody Restaurant restaurant) {
+    restaurantService.updateRestaurant(id, restaurant);
+    return "{}";
   }
 
 }
