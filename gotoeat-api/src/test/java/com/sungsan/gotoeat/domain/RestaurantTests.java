@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Test;
 
 class RestaurantTests {
 
-  private final Restaurant restaurant = new Restaurant(1L, "VIPS", "SEOUL");
+  Restaurant restaurant = Restaurant.builder()
+      .id(1L)
+      .name("VIPS")
+      .location("SEOUL")
+      .build();
 
   @Test
   public void creation() {

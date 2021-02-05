@@ -51,7 +51,12 @@ class RestaurantControllerTests {
   @Test
   public void list() throws Exception {
     List<Restaurant> restaurants = new ArrayList<>();
-    restaurants.add(new Restaurant(1L, "VIPS", "JINJU"));
+    Restaurant restaurant = Restaurant.builder()
+        .id(1L)
+        .name("VIPS")
+        .location("JINJU")
+        .build();
+    restaurants.add(restaurant);
     given(restaurantService.getRestaurants()).willReturn(restaurants);
 
     mvc.perform(MockMvcRequestBuilders.get("/restaurants"))
@@ -71,9 +76,19 @@ class RestaurantControllerTests {
 
   @Test
   public void detail() throws Exception {
-    Restaurant restaurant1 = new Restaurant(1L, "VIPS", "SEOUL");
+    Restaurant restaurant1 = Restaurant.builder()
+        .id(1L)
+        .name("VIPS")
+        .location("SEOUL")
+        .build();
+    System.out.println(restaurant1.getName());
     restaurant1.addMenuItem(new MenuItem());
-    Restaurant restaurant2 = new Restaurant(2L, "VIPS", "SEOUL");
+    Restaurant restaurant2 = Restaurant.builder()
+        .id(2L)
+        .name("VIPS")
+        .location("SEOUL")
+        .build();
+
     given(restaurantService.getRestaurant(1L)).willReturn(restaurant1);
     given(restaurantService.getRestaurant(2L)).willReturn(restaurant2);
     mvc.perform(MockMvcRequestBuilders.get("/restaurants/1"))
