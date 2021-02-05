@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.sungsan.gotoeat.domain.MenuItemRepository;
 import com.sungsan.gotoeat.domain.Restaurant;
+import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
 import com.sungsan.gotoeat.domain.RestaurantRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +43,18 @@ class RestaurantServiceTests {
   }
 
   @Test
-  public void getRestaurant() {
+  public void getRestaurantWithSuccess() {
 
     Restaurant restaurant = restaurantService.getRestaurant(1L);
 
-    System.out.println(restaurant.getName());
-
     assertEquals(restaurant.getId(), 1);
+  }
+
+  @Test
+  public void getRestaurantWithFail() {
+
+    assertThrows(RestaurantNotFoundException.class, () -> restaurantService.getRestaurant(404L));
+
   }
 
   @Test
@@ -59,7 +65,7 @@ class RestaurantServiceTests {
   }
 
   @Test
-  public void addRestaurant(){
+  public void addRestaurant() {
     System.out.println(1);
     given(restaurantRepository.save(any(Restaurant.class))).will(invocation -> { //addRestaurant가 호출 된 뒤에 이 메소드가 실행됨!
       System.out.println(invocation);
@@ -85,7 +91,7 @@ class RestaurantServiceTests {
   }
 
   @Test
-  public void updateRestaurant(){
+  public void updateRestaurant() {
     Restaurant restaurant = Restaurant.builder()
         .id(1L)
         .name("VIPS")

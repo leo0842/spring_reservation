@@ -5,6 +5,7 @@ import com.sungsan.gotoeat.domain.Restaurant;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +39,7 @@ public class RestaurantController {
   }
 
   @PostMapping("/restaurants")
-  public ResponseEntity<?> addRestaurant(@RequestBody Restaurant resource) throws URISyntaxException {
+  public ResponseEntity<?> addRestaurant(@Valid @RequestBody Restaurant resource) throws URISyntaxException {
     String name = resource.getName();
     String location = resource.getLocation();
     Restaurant restaurant = Restaurant.builder()
@@ -52,7 +53,7 @@ public class RestaurantController {
   }
 
   @PatchMapping("/restaurants/{id}")
-  public String updateRestaurant(@PathVariable("id") Long id, @RequestBody Restaurant restaurant) {
+  public String updateRestaurant(@PathVariable("id") Long id,@Valid @RequestBody Restaurant restaurant) {
     restaurantService.updateRestaurant(id, restaurant);
     return "{}";
   }

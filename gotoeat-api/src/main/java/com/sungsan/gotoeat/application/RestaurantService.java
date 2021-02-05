@@ -3,6 +3,7 @@ package com.sungsan.gotoeat.application;
 import com.sungsan.gotoeat.domain.MenuItem;
 import com.sungsan.gotoeat.domain.MenuItemRepository;
 import com.sungsan.gotoeat.domain.Restaurant;
+import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
 import com.sungsan.gotoeat.domain.RestaurantRepository;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class RestaurantService {
   }
 
   public Restaurant getRestaurant(Long id) {
-    Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+    Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
     List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
     restaurant.setMenuItems(menuItems);
     return restaurant;

@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.sungsan.gotoeat.application.RestaurantService;
 import com.sungsan.gotoeat.domain.MenuItem;
 import com.sungsan.gotoeat.domain.Restaurant;
+import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class RestaurantControllerTests {
   private RestaurantService restaurantService;
 
   @Test
-  public void create() throws Exception {
+  public void createWithValidData() throws Exception {
     mvc.perform(MockMvcRequestBuilders.post("/restaurants")
         .contentType(MediaType.APPLICATION_JSON)
         .content("{\"name\":\"Outback\",\"location\":\"Pusan\"}"))
@@ -45,6 +46,15 @@ class RestaurantControllerTests {
         .andExpect(content().string("{}"));
 
     verify(restaurantService).addRestaurant(any());
+  }
+
+  @Test
+  public void createWithInvalidData()throws Exception {
+    mvc.perform(MockMvcRequestBuilders.post("/restaurants")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"\",\"location\":\"\"}"))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
   }
 
 
@@ -75,7 +85,7 @@ class RestaurantControllerTests {
   }
 
   @Test
-  public void detail() throws Exception {
+  public void detailWithSuccess() throws Exception {
     Restaurant restaurant1 = Restaurant.builder()
         .id(1L)
         .name("VIPS")
@@ -105,7 +115,16 @@ class RestaurantControllerTests {
   }
 
   @Test
-  public void update() throws Exception {
+  public void detailWithNotExist() throws Exception {
+    given(restaurantService.getRestaurant(404L)).willThrow(new RestaurantNotFoundException(404L));
+    mvc.perform(MockMvcRequestBuilders.get("/restaurants/404"))
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(content().string("{}"));
+  }
+
+  @Test
+  public void updateWithValidData() throws Exception {
     mvc.perform(MockMvcRequestBuilders.patch("/restaurants/1")
         .contentType(MediaType.APPLICATION_JSON)
         .content("{\"name\":\"Pasta\", \"location\":\"Ilsan\"}"))
@@ -113,6 +132,18 @@ class RestaurantControllerTests {
         .andExpect(status().isOk());
 
     verify(restaurantService).updateRestaurant(any(Long.class), any(Restaurant.class));
+
+  }
+
+  @Test
+  public void updateWithInvalidData() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.patch("/restaurants/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"\", \"location\":\"\"}"))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+//    verify(restaurantService).updateRestaurant(any(Long.class), any(Restaurant.class));
 
   }
 
