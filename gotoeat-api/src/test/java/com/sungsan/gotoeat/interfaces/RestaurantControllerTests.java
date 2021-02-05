@@ -72,7 +72,7 @@ class RestaurantControllerTests {
   @Test
   public void detail() throws Exception {
     Restaurant restaurant1 = new Restaurant(1L, "VIPS", "SEOUL");
-    restaurant1.addMenuItem(new MenuItem(1L, 1L, "Steak"));
+    restaurant1.addMenuItem(new MenuItem());
     Restaurant restaurant2 = new Restaurant(2L, "VIPS", "SEOUL");
     given(restaurantService.getRestaurant(1L)).willReturn(restaurant1);
     given(restaurantService.getRestaurant(2L)).willReturn(restaurant2);

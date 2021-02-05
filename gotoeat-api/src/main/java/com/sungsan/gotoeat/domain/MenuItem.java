@@ -1,27 +1,16 @@
 package com.sungsan.gotoeat.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class MenuItem {
 
-  private final Long id;
-  private final Long restaurantId;
-  private final String menu;
+  @Id
+  @GeneratedValue
+  private  Long id;
+  private  Long restaurantId;
+  private  String menu;
 
-  public MenuItem(Long id, Long restaurantId, String menu) {
-
-    this.id = id;
-    this.restaurantId = restaurantId;
-    this.menu = menu;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public Long getRestaurantId() {
-    return restaurantId;
-  }
-
-  public String getMenu(){
-    return menu;
-  }
 }

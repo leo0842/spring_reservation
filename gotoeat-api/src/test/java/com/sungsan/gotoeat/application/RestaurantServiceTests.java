@@ -30,7 +30,8 @@ class RestaurantServiceTests {
     Restaurant restaurant1 = new Restaurant(1L, "VIPS", "JINJU");
     restaurants.add(restaurant1);
     given(restaurantRepository.findAll()).willReturn(restaurants);
-    given(restaurantRepository.findById(1L)).willReturn(restaurants.stream().filter(restaurant -> restaurant.getId().equals(1L)).findFirst().get());
+    given(restaurantRepository.findById(1L)).willReturn(
+        java.util.Optional.of(restaurants.stream().filter(restaurant -> restaurant.getId().equals(1L)).findFirst().get()));
 //    given(restaurantRepository.save(restaurant1)).willReturn(restaurant1); 이건 왜 addRestaurant()에서 인식하지 못할
     restaurantService = new RestaurantService(restaurantRepository, menuItemRepository);
   }
