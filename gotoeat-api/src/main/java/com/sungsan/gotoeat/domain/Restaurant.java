@@ -1,5 +1,7 @@
 package com.sungsan.gotoeat.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -29,6 +31,7 @@ public class Restaurant {
   @NotEmpty
   private String location;
   @Transient
+  @JsonInclude(Include.NON_NULL)
   private List<MenuItem> menuItems;
 
   public String getInformation() {
