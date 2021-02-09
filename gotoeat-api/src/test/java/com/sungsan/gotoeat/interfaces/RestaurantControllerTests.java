@@ -13,7 +13,11 @@ import com.sungsan.gotoeat.application.RestaurantService;
 import com.sungsan.gotoeat.domain.MenuItem;
 import com.sungsan.gotoeat.domain.Restaurant;
 import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
+import com.sungsan.gotoeat.domain.Review;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,31 +90,26 @@ class RestaurantControllerTests {
 
   @Test
   public void detailWithSuccess() throws Exception {
-    Restaurant restaurant1 = Restaurant.builder()
+    Restaurant restaurant = Restaurant.builder()
         .id(1L)
         .name("VIPS")
         .location("SEOUL")
         .build();
-    System.out.println(restaurant1.getName());
-    restaurant1.addMenuItem(new MenuItem());
-    Restaurant restaurant2 = Restaurant.builder()
+    MenuItem menuItem = MenuItem.builder()
         .id(2L)
-        .name("VIPS")
-        .location("SEOUL")
+        .menu("Steak")
         .build();
+    Review review = Review.builder().name("Leo").score(3).body("delicious").build();
+    restaurant.addMenuItem(menuItem);
+    restaurant.setReviews(Collections.singletonList(review));
 
-    given(restaurantService.getRestaurant(1L)).willReturn(restaurant1);
-    given(restaurantService.getRestaurant(2L)).willReturn(restaurant2);
+    given(restaurantService.getRestaurant(1L)).willReturn(restaurant);
     mvc.perform(MockMvcRequestBuilders.get("/restaurants/1"))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("\"id\":1,\"name\":\"VIPS\",\"location\":\"SEOUL\"")))
-        .andExpect(content().string(containsString("Steak")));
-
-    mvc.perform(MockMvcRequestBuilders.get("/restaurants/2"))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(content().string(containsString("\"id\":2,\"name\":\"VIPS\",\"location\":\"SEOUL\"")));
+        .andExpect(content().string(containsString("Steak")))
+    .andExpect(content().string(containsString("delicious")));
 
   }
 

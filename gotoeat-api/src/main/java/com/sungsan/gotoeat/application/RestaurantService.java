@@ -5,6 +5,8 @@ import com.sungsan.gotoeat.domain.MenuItemRepository;
 import com.sungsan.gotoeat.domain.Restaurant;
 import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
 import com.sungsan.gotoeat.domain.RestaurantRepository;
+import com.sungsan.gotoeat.domain.Review;
+import com.sungsan.gotoeat.domain.ReviewRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +15,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class RestaurantService {
 
-  @Autowired
-  RestaurantRepository restaurantRepository;
+  //  @Autowired
+  private RestaurantRepository restaurantRepository;
+
+  //  @Autowired
+  private MenuItemRepository menuItemRepository;
+
+  //  @Autowired
+  private ReviewRepository reviewRepository;
 
   @Autowired
-  MenuItemRepository menuItemRepository;
-
-  public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
+  public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, ReviewRepository reviewRepository) {
     this.menuItemRepository = menuItemRepository;
     this.restaurantRepository = restaurantRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   public Restaurant getRestaurant(Long id) {
     Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
     List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
+    List<Review> reviews = reviewRepository.findByRestaurantId(id);
     restaurant.setMenuItems(menuItems);
+    restaurant.setReviews(reviews);
     return restaurant;
 
   }

@@ -33,6 +33,9 @@ public class Restaurant {
   @Transient
   @JsonInclude(Include.NON_NULL)
   private List<MenuItem> menuItems;
+  @Transient
+  @JsonInclude(Include.NON_NULL)
+  private List<Review> reviews;
 
   public String getInformation() {
     return name + " in " + location;
@@ -55,5 +58,9 @@ public class Restaurant {
   public void updateInfo(String name, String location) {
     this.name = name;
     this.location = location;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = new ArrayList<>(reviews);
   }
 }

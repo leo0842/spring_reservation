@@ -3,11 +3,14 @@ package com.sungsan.gotoeat.application;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import com.sungsan.gotoeat.domain.MenuItemRepository;
 import com.sungsan.gotoeat.domain.Restaurant;
 import com.sungsan.gotoeat.domain.RestaurantNotFoundException;
 import com.sungsan.gotoeat.domain.RestaurantRepository;
+import com.sungsan.gotoeat.domain.Review;
+import com.sungsan.gotoeat.domain.ReviewRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +25,9 @@ class RestaurantServiceTests {
 
   @Mock
   private MenuItemRepository menuItemRepository;
+
+  @Mock
+  private ReviewRepository reviewRepository;
 
   private RestaurantService restaurantService;
 
@@ -39,15 +45,29 @@ class RestaurantServiceTests {
     given(restaurantRepository.findById(1L)).willReturn(
         java.util.Optional.of(restaurants.stream().filter(restaurant -> restaurant.getId().equals(1L)).findFirst().get()));
 //    given(restaurantRepository.save(restaurant1)).willReturn(restaurant1); 이건 왜 addRestaurant()에서 인식하지 못할
-    restaurantService = new RestaurantService(restaurantRepository, menuItemRepository);
+    mockReviewRepository();
+    restaurantService = new RestaurantService(restaurantRepository, menuItemRepository, reviewRepository);
   }
+
+  private void mockReviewRepository() {
+
+    List<Review> reviews = new ArrayList<>();
+    reviews.add(Review.builder().name("Leo").score(3).body("delicious").build());
+    given(reviewRepository.findByRestaurantId(1L)).willReturn(reviews);
+  }
+
 
   @Test
   public void getRestaurantWithSuccess() {
 
     Restaurant restaurant = restaurantService.getRestaurant(1L);
 
+    verify(menuItemRepository).findByRestaurantId(1L);
+    verify(reviewRepository).findByRestaurantId(1L);
+
+    Review review = restaurant.getReviews().get(0);
     assertEquals(restaurant.getId(), 1);
+    assertEquals(review.getName(), "Leo");
   }
 
   @Test

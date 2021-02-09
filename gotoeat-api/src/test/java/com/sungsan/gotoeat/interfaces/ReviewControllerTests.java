@@ -34,7 +34,7 @@ class ReviewControllerTests {
 
   @Test
   public void createWithValid() throws Exception {
-    given(reviewService.addReview(any(Review.class))).willReturn(Review.builder().id(123L).build()
+    given(reviewService.addReview(any(Long.class), any(Review.class))).willReturn(Review.builder().id(123L).build()
     );
     mvc.perform(post("/restaurants/1/reviews")
         .contentType(MediaType.APPLICATION_JSON)
@@ -44,7 +44,7 @@ class ReviewControllerTests {
         .andExpect(status().isCreated())
         .andExpect(header().string("location", "/restaurants/1/reviews/123"));
 
-    verify(reviewService).addReview(any());
+    verify(reviewService).addReview(any(), any());
   }
   @Test
   public void createWithInvalid() throws Exception {
@@ -54,7 +54,7 @@ class ReviewControllerTests {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(reviewService, never()).addReview(any());
+    verify(reviewService, never()).addReview(any(), any());
   }
 
 }
