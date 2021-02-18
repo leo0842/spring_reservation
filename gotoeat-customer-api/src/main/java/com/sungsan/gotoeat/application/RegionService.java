@@ -19,13 +19,8 @@ public class RegionService {
 
   public List<Region> getRegions() {
     List<Region> regions = regionRepository.findAll();
-//    regions.add(Region.builder().name("Seoul").build());
 
     return regions;
   }
 
-  public Region addRegion(Region region) {
-
-    return regionRepository.save(region);
-  }
 }
