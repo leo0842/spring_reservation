@@ -33,7 +33,7 @@ class RestaurantControllerTests {
   @MockBean
   private RestaurantService restaurantService;
 
-  @Test
+  //  @Test
   public void list() throws Exception {
     List<Restaurant> restaurants = new ArrayList<>();
     Restaurant restaurant = Restaurant.builder()
@@ -60,6 +60,33 @@ class RestaurantControllerTests {
   }
 
   @Test
+  public void listWithParams() throws Exception {
+    List<Restaurant> restaurants = new ArrayList<>();
+    Restaurant restaurant = Restaurant.builder()
+        .id(1L)
+        .categoryId(2L)
+        .name("VIPS")
+        .location("Seoul")
+        .build();
+    restaurants.add(restaurant);
+    given(restaurantService.getRestaurants("Seoul", 2L)).willReturn(restaurants);
+
+    mvc.perform(MockMvcRequestBuilders.get("/restaurants?region=Seoul&category=2"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString(
+            "\"id\":1"
+        )))
+        .andExpect(content().string(containsString(
+            "\"name\":\"VIPS\""
+        )))
+        .andExpect(content().string(containsString(
+            "\"location\":\"Seoul\""
+        )));
+
+  }
+
+  @Test
   public void detailWithSuccess() throws Exception {
     Restaurant restaurant = Restaurant.builder()
         .id(1L)
@@ -80,7 +107,7 @@ class RestaurantControllerTests {
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("\"id\":1,\"name\":\"VIPS\",\"location\":\"SEOUL\"")))
         .andExpect(content().string(containsString("Steak")))
-    .andExpect(content().string(containsString("delicious")));
+        .andExpect(content().string(containsString("delicious")));
 
   }
 

@@ -38,6 +38,7 @@ class RestaurantServiceTests {
     List<Restaurant> restaurants = new ArrayList<>();
     Restaurant restaurant1 = Restaurant.builder()
         .id(1L)
+        .categoryId(2L)
         .name("VIPS")
         .location("JINJU")
         .build();
@@ -83,6 +84,20 @@ class RestaurantServiceTests {
     List<Restaurant> restaurants = restaurantService.getRestaurants();
     System.out.println(restaurants);
     assertEquals(restaurants.size(), 1);
+  }
+
+  @Test
+  public void getRestaurantsWithParams() {
+    List<Restaurant> mockRestaurants = new ArrayList<>();
+    mockRestaurants.add(Restaurant.builder().name("VIPS").categoryId(2L).location("Seoul").build());
+
+    given(restaurantRepository.findAllByLocationContainingAndCategoryId("Seoul", 2L)).willReturn(mockRestaurants);
+
+    List<Restaurant> restaurants = restaurantService.getRestaurants("Seoul", 2L);
+
+    System.out.println(restaurants);
+    assertEquals(restaurants.size(), 1);
+    assertEquals(restaurants.get(0).getLocation(), "Seoul");
   }
 
   @Test

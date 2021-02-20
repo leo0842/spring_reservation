@@ -46,6 +46,12 @@ public class RestaurantService {
     return restaurants;
   }
 
+
+  public List<Restaurant> getRestaurants(String region, Long categoryId) {
+    List<Restaurant> restaurants = restaurantRepository.findAllByLocationContainingAndCategoryId(region, categoryId);
+    return restaurants;
+  }
+
   public Restaurant addRestaurant(Restaurant restaurant) {
     return restaurantRepository.save(restaurant);
 

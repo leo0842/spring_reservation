@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,13 +27,20 @@ public class Restaurant {
   @Id
   @GeneratedValue
   private Long id;
+
+  @NotNull
+  private Long categoryId;
+
   @NotEmpty
   private String name;
+
   @NotEmpty
   private String location;
+
   @Transient
   @JsonInclude(Include.NON_NULL)
   private List<MenuItem> menuItems;
+
   @Transient
   @JsonInclude(Include.NON_NULL)
   private List<Review> reviews;

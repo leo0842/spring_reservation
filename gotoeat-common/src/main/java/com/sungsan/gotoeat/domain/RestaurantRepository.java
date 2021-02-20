@@ -7,4 +7,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
   List<Restaurant> findAll();
 
+  List<Restaurant> findAllByLocationContainingAndCategoryId(String region, Long categoryId);
+
 }
