@@ -35,7 +35,7 @@ public class UserControllerTests {
   @Test
   public void create() throws Exception {
 
-    User mockUser = User.builder().email("test@naver.com").name("tester").password("1234").build();
+    User mockUser = User.builder().id(1L).email("test@naver.com").name("tester").password("1234").build();
     given(userService.registerUser("test@naver.com", "tester", "1234")).willReturn(mockUser);
 
     mvc.perform(post("/users")
