@@ -10,6 +10,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import com.sungsan.gotoeat.domain.User;
 import com.sungsan.gotoeat.domain.UserRepository;
 import com.sungsan.gotoeat.interfaces.SessionResponseDto;
+import com.sungsan.gotoeat.utils.JwtUtil;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,9 +72,7 @@ class UserCustomerServiceTests {
     given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(mockUser));
     given(passwordEncoder.matches(any(), any())).willReturn(true);
 
-    SessionResponseDto sessionResponseDto = userService.authenticate(email, password);
-
-    assertEquals(sessionResponseDto.getAccessToken(), "AT");
+    User user = userService.authenticate(email, password);
 
   }
 
