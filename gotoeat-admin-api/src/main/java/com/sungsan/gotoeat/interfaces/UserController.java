@@ -54,7 +54,5 @@ public class UserController {
     return "{}";
 
   }
-  // TODO:
-//  4. delete -> soft delete
 
 }

@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
 
-  @Autowired
+
   ReviewRepository reviewRepository;
 
+
+  @Autowired
   public ReviewService(ReviewRepository reviewRepository) {
     this.reviewRepository = reviewRepository;
   }

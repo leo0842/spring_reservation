@@ -29,6 +29,7 @@ public class Restaurant {
   private Long id;
 
   @NotNull
+  @Transient
   private Long categoryId;
 
   @NotEmpty
