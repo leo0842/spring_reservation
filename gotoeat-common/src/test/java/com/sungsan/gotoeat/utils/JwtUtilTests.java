@@ -1,18 +1,25 @@
 package com.sungsan.gotoeat.utils;
 
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.function.BooleanSupplier;
+import io.jsonwebtoken.Claims;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class JwtUtilTests {
 
+  private final String secretKey = "123456789012345678901234567890123456";
+
+  private JwtUtil jwtUtil;
+
+  @BeforeEach
+  public void setUp() {
+    jwtUtil = new JwtUtil(secretKey);
+  }
+
   @Test
   public void createToken() {
-
-    String secretKey = "123456789012345678901234567890123456";
-    JwtUtil jwtUtil = new JwtUtil(secretKey);
 
     Long userId = 1L;
     String userName = "Leo";
@@ -20,6 +27,15 @@ class JwtUtilTests {
 
     assertTrue(token.contains("."));
 
+  }
+
+  @Test
+  public void getClaims() {
+    String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInVzZXJOYW1lIjoiTGVvIn0.CO12imVsXBzBLktFK0r3jPHzeScqV0deh9h2N16JVqM";
+    Claims claims = jwtUtil.getClaims(token);
+
+    assertEquals(claims.get("userName"),"Leo");
+    assertEquals(claims.get("userId", Long.class),1L);
   }
 
 }

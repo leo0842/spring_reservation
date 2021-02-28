@@ -1,5 +1,7 @@
 package com.sungsan.gotoeat.utils;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,5 +25,15 @@ public class JwtUtil {
         .compact();
     System.out.println(token);
     return token;
+  }
+
+  public Claims getClaims(String token) {
+
+    JwtParser parser = Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build();
+
+     return parser.parseClaimsJws(token).getBody();
+
   }
 }

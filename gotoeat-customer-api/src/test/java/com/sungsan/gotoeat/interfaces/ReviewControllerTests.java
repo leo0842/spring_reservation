@@ -33,27 +33,31 @@ class ReviewControllerTests {
 
   @Test
   public void createWithValid() throws Exception {
-    given(reviewService.addReview(any(Long.class), any(Review.class))).willReturn(Review.builder().id(123L).build()
-    );
+    String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInVzZXJOYW1lIjoiTGVvIn0.CO12imVsXBzBLktFK0r3jPHzeScqV0deh9h2N16JVqM";
+
+    given(reviewService.addReview(any(Long.class), any(String.class), any(Integer.class), any(String.class))).willReturn(Review.builder().id(123L).build());
+
     mvc.perform(post("/restaurants/1/reviews")
+        .header("Authorization", "Bearer " + token)
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"name\":\"sungsan\",\"score\":3,\"body\":\"delicious\"}"))
+        .content("{\"score\":3,\"body\":\"delicious\"}"))
         .andDo(print())
-        .andExpect(content().string("{}"))
         .andExpect(status().isCreated())
+        .andExpect(content().string("{}"))
         .andExpect(header().string("location", "/restaurants/1/reviews/123"));
 
-    verify(reviewService).addReview(any(), any());
+    verify(reviewService).addReview(1L, "Leo", 3, "delicious");
   }
+
   @Test
   public void createWithInvalid() throws Exception {
     mvc.perform(post("/restaurants/1/reviews")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"score\":3,\"body\":\"delicious\"}"))
+        .content("{\"body\":\"delicious\"}"))
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(reviewService, never()).addReview(any(), any());
+    verify(reviewService, never()).addReview(any(Long.class), any(String.class), any(Integer.class), any(String.class));
   }
 
 }
