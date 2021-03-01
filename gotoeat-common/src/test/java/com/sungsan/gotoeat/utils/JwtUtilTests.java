@@ -23,7 +23,10 @@ class JwtUtilTests {
 
     Long userId = 1L;
     String userName = "Leo";
-    String token = jwtUtil.createToken(userId, userName);
+    Long restaurantId = 1L;
+    String token = jwtUtil.createToken(userId, userName, restaurantId);
+
+    System.out.println(token);
 
     assertTrue(token.contains("."));
 

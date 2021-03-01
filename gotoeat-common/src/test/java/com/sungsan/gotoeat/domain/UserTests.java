@@ -32,4 +32,18 @@ public class UserTests {
     assertFalse(user.isActive());
   }
 
+  @Test
+  public void restaurantOwner() {
+
+    User user = User.builder().level(1).build();
+
+    assertFalse(user.isRestaurantOwner());
+
+    user.setRestaurantId(1L);
+
+    assertTrue(user.isRestaurantOwner());
+    assertEquals(user.getRestaurantId(), 1L);
+
+  }
+
 }

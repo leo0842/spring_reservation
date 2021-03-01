@@ -32,33 +32,39 @@ class UserCustomerServiceTests {
   }
 
   @Test
-  public void registerUser() {
+  public void authenticateWithValid() {
     String email = "test@naver.com";
-    String name = "test";
     String password = "1234";
-    User mockUser = User.builder().email(email).name(name).password(password).build();
 
-    given(userRepository.save(any(User.class))).willReturn(mockUser);
+    User mockUser = User.builder().email(email).build();
+    given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(mockUser));
+    given(passwordEncoder.matches(any(), any())).willReturn(true);
 
-    User user = userService.registerUser(email, name, password);
-
-    assertEquals(user.getName(), "test");
-
-    verify(userRepository).save(any());
+    User user = userService.authenticate(email, password);
 
   }
 
   @Test
-  public void registerUserWithExistingUser() {
-    String email = "test@naver.com";
-    String name = "test";
+  public void authenticateWithUnregisteredEmail() {
+    String email = "test@naver.net";
     String password = "1234";
-    User mockUser = User.builder().email(email).name(name).password(password).build();
 
-    given(userRepository.findByEmail(email)).willReturn(java.util.Optional.ofNullable(mockUser));
+    given(userRepository.findByEmail(email)).willThrow(UnregisteredEmailException.class);
 
-    assertThrows(EmailExistException.class, () -> userService.registerUser(email, name, password));
+    assertThrows(UnregisteredEmailException.class, () -> userService.authenticate(email, password));
 
   }
 
+  @Test
+  public void authenticateWithWrongPassword() {
+    String email = "test@naver.com";
+    String password = "4321";
+
+    User mockUser = User.builder().email(email).password(password).build();
+    given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(mockUser));
+    given(passwordEncoder.matches(any(), any())).willReturn(false);
+
+    assertThrows(WrongPasswordException.class, () -> userService.authenticate(email, password));
+
+  }
 }
