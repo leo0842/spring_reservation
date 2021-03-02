@@ -4,4 +4,5 @@ include 'gotoeat-common'
 include 'gotoeat-admin-api'
 include 'gotoeat-customer-api'
 include 'gotoeat-login-api'
+include 'gotoeat-restaurant-api'
 
