@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    volumes:
+      - ${PWD}/mysql:/var/lib/mysql
+    ports:
+      - 13306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=MYSQL_PASSWORD
+      - MYSQL_DATABASE=gotoeat
+  login-api:
+    image: openjdk:11
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/gotoeat/run.sh
+      - ./gotoeat-login-api/build/libs:/home/gotoeat/libs
+    ports:
+      - 8001:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/gotoeat && sh run.sh"
+  admin-api:
+    image: openjdk:11
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/gotoeat/run.sh
+      - ./gotoeat-admin-api/build/libs:/home/gotoeat/libs
+    ports:
+      - 8002:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/gotoeat && sh run.sh"
+  customer-api:
+    image: openjdk:11
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/gotoeat/run.sh
+      - ./gotoeat-customer-api/build/libs:/home/gotoeat/libs
+    ports:
+      - 8003:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/gotoeat && sh run.sh"
+  restaurant-api:
+    image: openjdk:11
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/gotoeat/run.sh
+      - ./gotoeat-restaurant-api/build/libs:/home/gotoeat/libs
+    ports:
+      - 8004:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/gotoeat && sh run.sh"

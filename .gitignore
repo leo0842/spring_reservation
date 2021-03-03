@@ -43,3 +43,9 @@ gotoeat-web/
 *.json
 
 .DS_Store
+
+.env
+
+data/
+
+mysql
